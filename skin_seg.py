@@ -250,3 +250,23 @@ class Skin_Detect():
             cv2.imshow("Extracted Skin",seg)
         return np.asarray(skin_, dtype=np.uint8)
 
+
+if __name__ == "__main__":
+    if len(sys.argv) < 2:
+        print("dati calea catre o imagine!!!!")
+        sys.exit(0)
+    image = sys.argv[1]
+    try:
+        img = np.array(cv2.imread(image), dtype=np.uint8)
+    except:
+        print('Error while loading the Image,image does not exist!!!!')
+        sys.exit(1)
+    test = Skin_Detect()
+    YCrCb_Frames = cv2.cvtColor(img, cv2.COLOR_BGR2YCrCb)
+    HSV_Frames = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
+    test.Rule_A(img,True)
+    test.Rule_B(YCrCb_Frames,True)
+    test.Rule_C(HSV_Frames,True)
+    test.RGB_H_CbCr(img,True)
+    plt.show()
+    cv2.waitKey(0)

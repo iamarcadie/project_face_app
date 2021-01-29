@@ -150,10 +150,8 @@ class Train_Model():
                                 fontdict={'fontsize': 15,'fontweight': 'medium'})
                             axs[int(count/5)][count%5].axis('off')
                             '''
-                            #print("[{},{}]".format(int(count/5),count%5))
                             count += 1
-                            #cv2.imshow('Rotated to save', rotated_image)
-                    
+                            
             except Exception as e:
                 print(e)
                 print("[Warning] Something went wrong!!!")
@@ -166,11 +164,3 @@ class Train_Model():
         cam.release ()
         # cv2.destroyAllWindows ()
         # plt.show()
-def Arg_Parse():
-    Arg_Par = arg.ArgumentParser()
-    Arg_Par.add_argument("-v", "--video",
-                    help = "path of the video or if not then webcam")
-    Arg_Par.add_argument("-c", "--camera",
-                    help = "Id of the camera")
-    arg_list = vars(Arg_Par.parse_args())
-    return arg_list

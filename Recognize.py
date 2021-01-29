@@ -74,10 +74,33 @@ class Recognizer():
             else:
                 self.DispID(face*3, self.Get_UserName(id1, conf), img)   
         return img
-def Arg_Parse():
-    Arg_Par = arg.ArgumentParser()
-    Arg_Par.add_argument("-v", "--video",
-                    help = "path of the video or if not then webcam")
-    Arg_Par.add_argument("-c", "--camera",
-                    help = "Id of the camera")
-    arg_list = vars(Arg_Par.parse_args())
+
+if __name__ == "__main__":
+    skin_detect = Skin_Detect()
+    size1 = (30,30)
+    size2 = (80,110)
+    scale_factor = 3
+    Face_Detect = Face_Detector(skin_detect)
+    face_cascade = './Haar_Cascades/haarcascade_frontalface_default.xml'
+    file_name = 'train.yaml'
+    if not (os.path.isfile(file_name)):
+        raise RuntimeError("%s: not found" % file_name)
+    if not (os.path.isfile(face_cascade)):
+        raise RuntimeError("%s: not found" % face_cascade)
+    # variables for LBPH algorithm
+    radius = 1
+    neighbour = 8
+    grid_x = 8
+    grid_y = 8
+    var = list([radius,neighbour,grid_x,grid_y])
+    model = Recognizer(face_cascade,file_name,var)
+    
+    video = cv2.VideoCapture(-1)
+    while True:
+        ret, img = video.read()
+        predicted = model.predict(img,Face_Detect,size1,size2)
+        cv2.imshow('video', predicted)
+        k = cv2.waitKey(10) & 0xff  # 'ESC' for Exit
+        if k == 27 or predicted is None:
+            break
+    cv2.destroyAllWindows()
